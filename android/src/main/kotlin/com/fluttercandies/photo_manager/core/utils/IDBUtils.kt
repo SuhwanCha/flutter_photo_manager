@@ -609,6 +609,14 @@ interface IDBUtils {
         return "$createDateCond $updateDateCond"
     }
 
+    fun getDateCond2(args: ArrayList<String>, option: FilterOption): String {
+        val createDateCond =
+            addDateCond(args, option.createDateCond, MediaStore.Images.Media.DATE_TAKEN)
+        val updateDateCond =
+            addDateCond(args, option.updateDateCond, MediaStore.Images.Media.DATE_MODIFIED)
+        return "$createDateCond $updateDateCond"
+    }
+
     private fun addDateCond(args: ArrayList<String>, dateCond: DateCond, dbKey: String): String {
         if (dateCond.ignore) {
             return ""

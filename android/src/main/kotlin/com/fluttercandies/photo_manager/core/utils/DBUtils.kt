@@ -189,7 +189,7 @@ object DBUtils : IDBUtils {
             args.add(galleryId)
         }
         val typeSelection = getCondFromType(requestType, option, args)
-        val dateSelection = getDateCond(args, option)
+        val dateSelection = getDateCond2(args, option)
         val sizeWhere = sizeWhere(requestType, option)
         val keys =
             (IDBUtils.storeImageKeys + IDBUtils.storeVideoKeys + IDBUtils.typeKeys + locationKeys).distinct().toTypedArray()
