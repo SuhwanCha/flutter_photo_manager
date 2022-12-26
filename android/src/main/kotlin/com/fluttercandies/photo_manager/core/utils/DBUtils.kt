@@ -33,7 +33,7 @@ object DBUtils : IDBUtils {
         val dateSelection = getDateCond(args, option)
         val sizeWhere = sizeWhere(requestType, option)
         val selection =
-            "${MediaStore.MediaColumns.BUCKET_ID} IS NOT NULL $typeSelection $dateSelection $sizeWhere) GROUP BY (${MediaStore.MediaColumns.BUCKET_ID}"
+            "${MediaStore.MediaColumns.BUCKET_ID} IS NOT NULL $typeSelection $sizeWhere) GROUP BY (${MediaStore.MediaColumns.BUCKET_ID}"
         val cursor = context.contentResolver.query(
             allUri,
             IDBUtils.storeBucketKeys + arrayOf("count(1)"),
@@ -68,7 +68,7 @@ object DBUtils : IDBUtils {
         val dateSelection = getDateCond(args, option)
         val sizeWhere = sizeWhere(requestType, option)
         val selections =
-            "${MediaStore.MediaColumns.BUCKET_ID} IS NOT NULL $typeSelection $dateSelection $sizeWhere"
+            "${MediaStore.MediaColumns.BUCKET_ID} IS NOT NULL $typeSelection $sizeWhere"
 
         val cursor = context.contentResolver.query(
             allUri,
@@ -147,7 +147,7 @@ object DBUtils : IDBUtils {
             args.add(pathId)
         }
         val typeSelection = getCondFromType(requestType, option, args)
-        val dateSelection = getDateCond(args, option)
+        val dateSelection = ""
         val sizeWhere = sizeWhere(requestType, option)
         val keys =
             (IDBUtils.storeImageKeys + IDBUtils.storeVideoKeys + IDBUtils.typeKeys + locationKeys).distinct().toTypedArray()
@@ -189,7 +189,7 @@ object DBUtils : IDBUtils {
             args.add(galleryId)
         }
         val typeSelection = getCondFromType(requestType, option, args)
-        val dateSelection = getDateCond2(args, option)
+        val dateSelection = ""
         val sizeWhere = sizeWhere(requestType, option)
         val keys =
             (IDBUtils.storeImageKeys + IDBUtils.storeVideoKeys + IDBUtils.typeKeys + locationKeys).distinct().toTypedArray()

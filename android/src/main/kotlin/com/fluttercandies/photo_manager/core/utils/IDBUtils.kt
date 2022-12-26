@@ -167,10 +167,9 @@ interface IDBUtils {
             }
             tmpTime
         } else getLong(DATE_ADDED)
-        val type = getInt(MediaStore.Files.FileColumns.MEDIA_TYPE)
+        val type = 1
         val mimeType = getString(MIME_TYPE)
-        val duration = if (type == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) 0
-        else getLong(DURATION)
+        val duration = getLong(0)
         var width = getInt(WIDTH)
         var height = getInt(HEIGHT)
         val displayName = getString(DISPLAY_NAME)
@@ -611,10 +610,10 @@ interface IDBUtils {
 
     fun getDateCond2(args: ArrayList<String>, option: FilterOption): String {
         val createDateCond =
-            addDateCond(args, option.createDateCond, MediaStore.Images.Media.DATE_TAKEN)
-        val updateDateCond =
-            addDateCond(args, option.updateDateCond, MediaStore.Images.Media.DATE_MODIFIED)
-        return "$createDateCond $updateDateCond"
+            addDateCond(args, option.createDateCond, MediaStore.Images.ImageColumns.DATE_TAKEN)
+        // val updateDateCond =
+        //     addDateCond(args, option.updateDateCond, MediaStore.Images.Media.DATE_MODIFIED)
+        return "$createDateCond"
     }
 
     private fun addDateCond(args: ArrayList<String>, dateCond: DateCond, dbKey: String): String {
@@ -626,8 +625,8 @@ interface IDBUtils {
         val maxMs = dateCond.maxMs
 
         val dateSelection = "AND ( $dbKey >= ? AND $dbKey <= ? )"
-        args.add((minMs / 1000).toString())
-        args.add((maxMs / 1000).toString())
+        args.add((minMs).toString())
+        args.add((maxMs).toString())
 
         return dateSelection
     }

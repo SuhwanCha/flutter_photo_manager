@@ -89,10 +89,10 @@ object AndroidQDBUtils : IDBUtils {
         val list = ArrayList<AssetPathEntity>()
         val args = ArrayList<String>()
         val typeSelection = getCondFromType(requestType, option, args)
-        val dateSelection = getDateCond(args, option)
+        // val dateSelection = getDateCond(args, option)
         val sizeWhere = sizeWhere(requestType, option)
         val selections =
-            "$BUCKET_ID IS NOT NULL $typeSelection $dateSelection $sizeWhere"
+            "$BUCKET_ID IS NOT NULL $typeSelection $sizeWhere"
 
         val cursor = context.contentResolver.query(
             allUri,
@@ -193,19 +193,36 @@ object AndroidQDBUtils : IDBUtils {
         if (!isAll) {
             args.add(galleryId)
         }
-        val typeSelection: String = getCondFromType(requestType, option, args)
-        val sizeWhere = sizeWhere(requestType, option)
-        val dateSelection = getDateCond(args, option)
-        val keys = assetKeys().distinct().toTypedArray()
+        // val typeSelection: String = getCondFromType(requestType, option, args)
+        // val sizeWhere = sizeWhere(requestType, option)
+        val dateSelection = getDateCond2(args, option)
+        // val keys = assetKeys().distinct().toTypedArray()
+        val keys = arrayOf(
+            MediaStore.Images.ImageColumns._ID,
+            MediaStore.Images.ImageColumns.DATA,
+            MediaStore.Images.ImageColumns.MIME_TYPE,
+            MediaStore.Images.ImageColumns.TITLE,
+            MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+            MediaStore.Images.ImageColumns.DATE_ADDED,
+            MediaStore.Images.ImageColumns.DATE_TAKEN,
+            MediaStore.Images.ImageColumns.DATE_MODIFIED,
+            MediaStore.Images.ImageColumns.DISPLAY_NAME,
+            MediaStore.Images.ImageColumns.ORIENTATION,
+            MediaStore.Images.ImageColumns.WIDTH,
+            MediaStore.Images.ImageColumns.HEIGHT,
+            MediaStore.Images.ImageColumns.SIZE,
+            MediaStore.Images.ImageColumns.RELATIVE_PATH,
+        )
+
         val selection = if (isAll) {
-            "$BUCKET_ID IS NOT NULL $typeSelection $dateSelection $sizeWhere"
+            "$BUCKET_ID IS NOT NULL $dateSelection"
         } else {
-            "$BUCKET_ID = ? $typeSelection $dateSelection $sizeWhere"
+            "$BUCKET_ID = ? $dateSelection"
         }
         val pageSize = end - start
         val sortOrder = getSortOrder(start, pageSize, option)
         val cursor = context.contentResolver.query(
-            allUri,
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
             keys,
             selection,
             args.toTypedArray(),
