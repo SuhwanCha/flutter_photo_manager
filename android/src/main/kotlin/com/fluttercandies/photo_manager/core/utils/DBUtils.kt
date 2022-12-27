@@ -65,7 +65,7 @@ object DBUtils : IDBUtils {
         val args = ArrayList<String>()
         val typeSelection: String = getCondFromType(requestType, option, args)
         val projection = IDBUtils.storeBucketKeys + arrayOf("count(1)")
-        val dateSelection = getDateCond(args, option)
+        // val dateSelection = getDateCond(args, option)
         val sizeWhere = sizeWhere(requestType, option)
         val selections =
             "${MediaStore.MediaColumns.BUCKET_ID} IS NOT NULL $typeSelection $sizeWhere"
@@ -146,15 +146,30 @@ object DBUtils : IDBUtils {
         if (!isAll) {
             args.add(pathId)
         }
-        val typeSelection = getCondFromType(requestType, option, args)
-        val dateSelection = ""
-        val sizeWhere = sizeWhere(requestType, option)
-        val keys =
-            (IDBUtils.storeImageKeys + IDBUtils.storeVideoKeys + IDBUtils.typeKeys + locationKeys).distinct().toTypedArray()
+        // val typeSelection = getCondFromType(requestType, option, args)
+        val dateSelection = getDateCond2(args, option)
+        // val sizeWhere = sizeWhere(requestType, option)
+        val keys = arrayOf(
+            MediaStore.Images.ImageColumns._ID,
+            MediaStore.Images.ImageColumns.DATA,
+            MediaStore.Images.ImageColumns.MIME_TYPE,
+            MediaStore.Images.ImageColumns.TITLE,
+            MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+            MediaStore.Images.ImageColumns.DATE_ADDED,
+            MediaStore.Images.ImageColumns.DATE_TAKEN,
+            MediaStore.Images.ImageColumns.DATE_MODIFIED,
+            MediaStore.Images.ImageColumns.DISPLAY_NAME,
+            MediaStore.Images.ImageColumns.ORIENTATION,
+            MediaStore.Images.ImageColumns.WIDTH,
+            MediaStore.Images.ImageColumns.HEIGHT,
+            MediaStore.Images.ImageColumns.SIZE,
+            MediaStore.Images.ImageColumns.RELATIVE_PATH,
+        )
+
         val selection = if (isAll) {
-            "${MediaStore.MediaColumns.BUCKET_ID} IS NOT NULL $typeSelection $dateSelection $sizeWhere"
+            "${MediaStore.MediaColumns.BUCKET_ID} IS NOT NULL $dateSelection"
         } else {
-            "${MediaStore.MediaColumns.BUCKET_ID} = ? $typeSelection $dateSelection $sizeWhere"
+            "${MediaStore.MediaColumns.BUCKET_ID} = ? $dateSelection"
         }
         val sortOrder = getSortOrder(page * size, size, option)
         val cursor = context.contentResolver.query(
